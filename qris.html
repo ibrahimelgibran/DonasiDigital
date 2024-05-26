@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - codingnepalweb.com -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QRIS - BY IEGCODE</title>
+    <!-- CSS -->
+    <link rel="shortcut icon" href="./logos/ieg.png" type="image/x-icon" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      /* Google Fonts - Poppins */
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      section {
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        background: #e3f2fd;
+      }
+      button {
+        font-size: 18px;
+        font-weight: 400;
+        color: #fff;
+        padding: 14px 22px;
+        border: none;
+        background: #4070f4;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #265df2;
+      }
+      button.show-modal,
+      .modal-box {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      }
+      section.active .show-modal {
+        display: none;
+      }
+      .overlay {
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        opacity: 0;
+        pointer-events: none;
+      }
+      section.active .overlay {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .modal-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 380px;
+        width: 100%;
+        padding: 30px 20px;
+        border-radius: 24px;
+        background-color: #fff;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s ease;
+        transform: translate(-50%, -50%) scale(1.2);
+      }
+      section.active .modal-box {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      .modal-box i {
+        font-size: 70px;
+        color: #4070f4;
+      }
+      .modal-box h2 {
+        margin-top: 20px;
+        font-size: 25px;
+        font-weight: 500;
+        color: #333;
+      }
+      .modal-box h3 {
+        font-size: 16px;
+        font-weight: 400;
+        color: #333;
+        text-align: center;
+      }
+      .modal-box .buttons {
+        margin-top: 25px;
+      }
+      .modal-box button {
+        font-size: 14px;
+        padding: 6px 12px;
+        margin: 0 10px;
+      }
+      /* CSS */
+      /* Tambahkan gaya untuk waktu di atas QR code */
+      .time-display {
+        position: fixed;
+        top: calc(100% - 102px); /* Sesuaikan dengan posisi yang diinginkan */
+        left: calc(50% - 71px); /* Sesuaikan dengan posisi yang diinginkan */
+        font-size: 16px;
+        font-weight: bold;
+        color: #ff0000;
+      }
+      .qr-code {
+        position: fixed;
+        top: calc(50% - 100px); /* Sesuaikan dengan posisi yang diinginkan */
+        left: calc(50% - 100px); /* Sesuaikan dengan posisi yang diinginkan */
+      }
+      .donation-text {
+        position: absolute;
+        top: 150px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center; /* Untuk mengatur teks menjadi rata tengah */
+      }
+    </style>
+    <!-- Fontawesome CDN Link -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <section class="active">
+      <span class="overlay"></span>
+      <div class="modal-box">
+        <div
+          id="timeDisplay"
+          class="time-display"
+          style="margin-bottom: 10px; color: #ff0000"
+        ></div>
+        <h1 style="color: #333">Maaf, sedang perbaikan 😊</h1>
+        <br />
+        <img src="./logos/qrcode.png" height="200" width="200" alt="QRIS" />
+        <h2>
+          Completed<i
+            class="fa-regular fa-circle-check"
+            style="font-size: 20px; margin-left: 10px"
+          ></i>
+        </h2>
+        <h3>
+          Terimakasih berbagi kebahagiaan, terhadap sesama, dan raih jannah-Nya.
+        </h3>
+        <div class="buttons" style="margin-top: 50px">
+          <button class="close-btn">
+            <a href="index.html" style="color: #fff; text-decoration: none"
+              >Ok, Back</a
+            >
+          </button>
+          <button class="close-btn" onclick="redirectToWhatsApp()">
+            Ok, Confim Admin
+          </button>
+        </div>
+      </div>
+    </section>
+    <script>
+      function redirectToWhatsApp() {
+        // Nomor WhatsApp tujuan
+        var phoneNumber = "6285876076005";
+
+        // Pesan yang akan dikirimkan
+        var message = encodeURIComponent("Assalamualaikum Admin..");
+
+        // URL untuk membuka WhatsApp dengan nomor tujuan dan pesan
+        var whatsappURL =
+          "https://api.whatsapp.com/send?phone=" +
+          phoneNumber +
+          "&text=" +
+          message;
+
+        // Buka WhatsApp di tab atau aplikasi baru
+        window.open(whatsappURL, "_blank");
+      }
+
+      const closeTime = Date.now() + 180000; // Waktu saat modal ditutup (3 menit dari sekarang)
+      updateTime(closeTime); // Panggil updateTime dengan closeTime
+      const interval = setInterval(() => updateTime(closeTime), 1000); // Set interval untuk memperbarui waktu setiap detik
+      setTimeout(() => {
+        section.classList.remove("active");
+        clearInterval(interval); // Hentikan interval setelah 3 menit
+      }, 180000); // Tunggu 3 menit sebelum menutup modal
+
+      function updateTime(closeTime) {
+        const timeDisplay = document.getElementById("timeDisplay");
+        const currentTime = Math.max(closeTime - Date.now(), 0); // Hitung waktu tersisa dari closeTime
+        const hours = Math.floor(currentTime / (1000 * 60 * 60));
+        const minutes = Math.floor(
+          (currentTime % (1000 * 60 * 60)) / (1000 * 60)
+        );
+        const seconds = Math.floor((currentTime % (1000 * 60)) / 1000);
+        const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
+          .toString()
+          .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+        timeDisplay.textContent = "Close in: " + formattedTime;
+      }
+    </script>
+  </body>
+</html>
